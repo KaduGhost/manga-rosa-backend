@@ -1,12 +1,14 @@
 import * as dotenv from "dotenv";
 import express from "express";
-import * as bodyParser from "body-parser";
 import {hiredRouter} from "./src/routes/hired";
+import cors from 'cors';
 
 const app = express();
 dotenv.config();
 
-app.use(bodyParser.json());
+app.use(cors());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 app.use("/hired", hiredRouter);
 
 app.listen(process.env.PORT, () => {

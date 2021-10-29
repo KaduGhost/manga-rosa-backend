@@ -9,7 +9,7 @@ export const create = async (hired: BasicHired, callback: Function) => {
     "INSERT INTO hired (name, email, cpf, phone) VALUES (?, ?, ?, ?)";
   db.query(
     queryString,
-    [hired.cpf, hired.email, hired.name, hired.phone],
+    [hired.name, hired.email, hired.cpf, hired.phone],
     (err, result) => {
       if (err) {
         callback(err);
