@@ -13,6 +13,19 @@ hiredRouter.get("/", async (req: Request, res: Response) => {
   });
 });
 
+hiredRouter.get("/findByName", async (req: Request, res: Response) => {
+
+  const { name }:any = req.query;
+  
+  hiredModel.findByName(name, (err: Error, hireds: IHired[]) => {
+    if (err) {
+      return res.status(500).json({"errorMessage": err.message});
+    }
+
+    res.status(200).json({"data": hireds});
+  });
+});
+
 hiredRouter.post("/", async (req: Request, res: Response) => {
 
   const { name, email, cpf, phone, knowledges } = req.body;

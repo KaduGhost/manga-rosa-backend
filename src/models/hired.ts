@@ -74,6 +74,47 @@ export const findOne = (hiredId: number, callback: Function) => {
   });
 };
 
+export const findByName = (hiredName: string, callback: Function) => {
+  const queryString = `
+        SELECT o.*, 
+        p.name AS knowledge_name 
+        FROM hired AS o 
+        INNER JOIN hired_knowledges AS k ON k.id_hired=o.id 
+        INNER JOIN knowledges AS p ON p.id=k.id_knowledges
+        WHERE o.name=?`;
+
+  db.query(queryString, hiredName, (err, result) => {
+    if (err) {
+      callback(err);
+    }
+
+    const rows = <RowDataPacket[]>result;
+    const hireds: IHired[] = [];
+
+    const addHired = (hired: IHired) => {
+      let hiredFind = hireds.find((hire) => hire.id === hired.id);
+      if (hiredFind) {
+        hiredFind.knowledges.push(hired.knowledges[0]);
+      } else {
+        hireds.push(hired);
+      }
+    };
+
+    rows.forEach((row) => {
+      const order: IHired = {
+        id: row.id,
+        cpf: row.cpf,
+        email: row.email,
+        name: row.name,
+        phone: row.phone,
+        knowledges: [row.knowledge_name],
+      };
+      addHired(order);
+    });
+    callback(null, hireds[0]);
+  });
+};
+
 export const findAll = (callback: Function) => {
   const queryString = `
         SELECT o.*, 
