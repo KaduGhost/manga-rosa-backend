@@ -66,8 +66,7 @@ hiredRouter.put("/", async (req: Request, res: Response) => {
   hiredModel.update(hired, (err: Error) => {
     if (err) {
       return res.status(400).json({ errorMessage: err.message });
-    }
-    res.status(200).json({ message: "updated" });
+    }else res.status(200).json({ message: "updated" });
   });
 });
 

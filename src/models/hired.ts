@@ -126,13 +126,10 @@ export const findAll = (callback: Function) => {
 
 export const update = async (hired: IHiredUpdate, callback: Function) => {
   const queryString =
-    "UPDATE hired SET name = ?, email = ?, phone = ?, valid = ?, date_validate = ? WHERE id = ?";
+    "UPDATE hired SET valid = ?, date_validate = ? WHERE id = ?";
   db.query(
     queryString,
     [
-      hired.name,
-      hired.email,
-      hired.phone,
       hired.valid,
       hired.dateValidate,
       hired.id,
