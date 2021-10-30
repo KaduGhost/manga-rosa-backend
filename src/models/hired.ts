@@ -1,4 +1,4 @@
-import { BasicHired, IHired, Knowledge } from "../types/hired";
+import { BasicHired, IHired, IHiredUpdate, Knowledge } from "../types/hired";
 import { db } from "../../db";
 import { OkPacket, RowDataPacket } from "mysql2";
 import * as hired_knowledgeModel from "../models/hired_knowledge";
@@ -42,6 +42,7 @@ export const create = async (hired: BasicHired, callback: Function) => {
     (err, result) => {
       if (err) {
         callback(err);
+        return;
       }
 
       const insertId = (<OkPacket>result).insertId;
@@ -52,9 +53,15 @@ export const create = async (hired: BasicHired, callback: Function) => {
       };
 
       hired.knowledges.forEach((knowledge) => {
-        knowledgeModel.findOne(knowledge, (err: Error, know: Knowledge) => {
-          hired_knowledgeModel.create(hiredAdded, know);
-        });
+        try {
+          knowledgeModel.findOne(knowledge, (err: Error, know: Knowledge) => {
+            if (know) {
+              hired_knowledgeModel.create(hiredAdded, know);
+            }
+          });
+        } catch (err) {
+          return;
+        }
       });
       callback(null, hiredAdded);
     }
@@ -74,10 +81,10 @@ export const findOne = (hiredId: number, callback: Function) => {
   db.query(queryString, hiredId, (err, result) => {
     if (err) {
       callback(err);
+    } else {
+      const hiredsExtracted = extractHireds(<RowDataPacket[]>result);
+      callback(null, hiredsExtracted[0]);
     }
-
-    const hiredsExtracted = extractHireds(<RowDataPacket[]>result);
-    callback(null, hiredsExtracted[0]);
   });
 };
 
@@ -93,10 +100,10 @@ export const findByName = (hiredName: string, callback: Function) => {
   db.query(queryString, hiredName, (err, result) => {
     if (err) {
       callback(err);
+    } else {
+      const hiredsExtracted = extractHireds(<RowDataPacket[]>result);
+      callback(null, hiredsExtracted[0]);
     }
-
-    const hiredsExtracted = extractHireds(<RowDataPacket[]>result);
-    callback(null, hiredsExtracted[0]);
   });
 };
 
@@ -110,14 +117,14 @@ export const findAll = (callback: Function) => {
   db.query(queryString, (err, result) => {
     if (err) {
       callback(err);
+    } else {
+      const hiredsExtracted = extractHireds(<RowDataPacket[]>result);
+      callback(null, hiredsExtracted);
     }
-
-    const hiredsExtracted = extractHireds(<RowDataPacket[]>result);
-    callback(null, hiredsExtracted);
   });
 };
 
-export const update = async (hired: IHired, callback: Function) => {
+export const update = async (hired: IHiredUpdate, callback: Function) => {
   const queryString =
     "UPDATE hired SET name = ?, email = ?, phone = ?, valid = ?, date_validate = ? WHERE id = ?";
   db.query(
@@ -133,10 +140,9 @@ export const update = async (hired: IHired, callback: Function) => {
     (err, result) => {
       if (err) {
         callback(err);
+      } else {
+        callback(null);
       }
-
-      const hiredsExtracted = extractHireds(<RowDataPacket[]>result);
-      callback(null, hiredsExtracted);
     }
   );
 };
