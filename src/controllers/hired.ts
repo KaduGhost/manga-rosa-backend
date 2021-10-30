@@ -7,8 +7,8 @@ import {
 } from "../types/hired";
 import { db } from "../../db";
 import { OkPacket, RowDataPacket } from "mysql2";
-import * as hired_knowledgeModel from "../models/hired_knowledge";
-import * as knowledgeModel from "../models/knowledge";
+import * as hired_knowledgeModel from "./hired_knowledge";
+import * as knowledgeModel from "./knowledge";
 
 //Função usada para extrair os contratados do result das querys
 const extractHireds = (result: RowDataPacket[]) => {

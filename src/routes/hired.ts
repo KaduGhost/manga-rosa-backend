@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
 import { QueryError } from "mysql2";
-import * as hiredModel from "../models/hired";
+import * as hiredModel from "../controllers/hired";
 import { IHired, IHiredRegister, IHiredUpdate } from "../types/hired";
 import * as CpfValidator from "cpf-cnpj-validator";
 import { checkCandidate } from "../../validators";
