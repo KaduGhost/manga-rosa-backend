@@ -6,6 +6,8 @@ export interface BasicHired {
   email: string;
   cpf: string;
   phone: string;
+  valid: boolean;
+  dateValidate: number;
   knowledges: string[];
 }
 
