@@ -1,5 +1,6 @@
 import * as yup from 'yup';
 
+//Edição e tradução de mensagens do validador
 yup.setLocale({
   mixed: {
     default: "é inválido",

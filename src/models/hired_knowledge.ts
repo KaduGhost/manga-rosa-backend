@@ -1,6 +1,7 @@
 import { IHiredRegistered, Knowledge } from "../types/hired";
 import { db } from "../../db";
 
+//Função para criar a ligação entre contratado e conhecimento
 export const create = (
   hired: IHiredRegistered,
   knowledge: Knowledge

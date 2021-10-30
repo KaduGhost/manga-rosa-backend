@@ -1,7 +1,10 @@
 import { IHiredRegister } from '../src/types/hired';
 import yup from './validator';
 
+//Objeto com funções para validação do contratado
 const candidateRegister = {
+    
+    //Função para validar informações obrigatórias do contratado
     validator: yup.object().shape({
         name: yup.string().required().label("Nome completo").max(100),
         email: yup.string().email().required().label("Email").max(100),
@@ -11,11 +14,13 @@ const candidateRegister = {
         })
     }),
 
+    //Função para validar informção não obrigatórias quando são informadas
     phoneValidator: yup.object().shape({
         phone: yup.string().label("Celular").length(11)
     })
 }
 
+//Função que valida um objeto contratado
 const validator = async function (validate: IHiredRegister) {
     try {
         await candidateRegister.validator.validate(validate);

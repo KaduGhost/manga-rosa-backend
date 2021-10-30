@@ -7,6 +7,7 @@ import { checkCandidate } from "../../validators";
 
 const hiredRouter = express.Router();
 
+//Rota para buscar todos os contratados validos ( que possuem conhecimentos cadastrados )
 hiredRouter.get("/", async (req: Request, res: Response) => {
   hiredModel.findAll((err: Error, hireds: IHired[]) => {
     if (err) {
@@ -16,6 +17,7 @@ hiredRouter.get("/", async (req: Request, res: Response) => {
   });
 });
 
+//Rota para buscar apenas um contratado valido pelo nome
 hiredRouter.get("/findByName", async (req: Request, res: Response) => {
   const { name }: any = req.query;
   hiredModel.findByName(name, (err: Error, hireds: IHired[]) => {
@@ -26,11 +28,14 @@ hiredRouter.get("/findByName", async (req: Request, res: Response) => {
   });
 });
 
+//Rota para cadastrar um novo contratado
 hiredRouter.post("/", async (req: Request, res: Response) => {
   const { name, email, cpf, phone, knowledges, valid } = req.body;
 
+  //Função para validação de cpf
   const cpfValid = CpfValidator.cpf.isValid(cpf);
 
+  //Objeto enviado pela rota e que será usada para a validação completa
   let hired: IHiredRegister = {
     name,
     email,
@@ -41,7 +46,9 @@ hiredRouter.post("/", async (req: Request, res: Response) => {
     cpfValid,
   };
 
+  //Função que valida todos os campos
   let result = await checkCandidate(hired);
+
 
   if (result.valid) {
     hiredModel.create(hired, (err: QueryError, hiredCreated: IHired) => {
@@ -61,9 +68,12 @@ hiredRouter.post("/", async (req: Request, res: Response) => {
   }
 });
 
+
+//Rota para dar update no contratado
 hiredRouter.put("/", async (req: Request, res: Response) => {
   const { id, valid, dateValidate } = req.body;
 
+  //Objeto enviado pela rota
   let hired: IHiredUpdate = {
     id,
     valid,

@@ -1,20 +1,8 @@
-import { BasicKnowledge, Knowledge } from "../types/hired";
+import { Knowledge } from "../types/hired";
 import { db } from "../../db";
-import { OkPacket, RowDataPacket } from "mysql2";
+import { RowDataPacket } from "mysql2";
 
-export const create = (knowledge: BasicKnowledge, callback: Function) => {
-  const queryString = "INSERT INTO hired (name) VALUES (?)";
-
-  db.query(queryString, [knowledge.name], (err, result) => {
-    if (err) {
-      callback(err);
-    }
-
-    const insertId = (<OkPacket>result).insertId;
-    callback(null, insertId);
-  });
-};
-
+//Função para buscar um conhecimento cadastrado no banco de dados
 export const findOne = (knowledgeName: string, callback: Function) => {
   const queryString = `SELECT * FROM knowledges WHERE name = ?`;
 
