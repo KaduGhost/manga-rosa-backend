@@ -1,13 +1,21 @@
-import { BasicHired, IHired, IHiredRegister, IHiredRegistered, IHiredUpdate, Knowledge } from "../types/hired";
+import {
+  IHired,
+  IHiredRegister,
+  IHiredRegistered,
+  IHiredUpdate,
+  Knowledge,
+} from "../types/hired";
 import { db } from "../../db";
 import { OkPacket, RowDataPacket } from "mysql2";
 import * as hired_knowledgeModel from "../models/hired_knowledge";
 import * as knowledgeModel from "../models/knowledge";
 
+//Função usada para extrair os contratados do result das querys
 const extractHireds = (result: RowDataPacket[]) => {
   const rows = <RowDataPacket[]>result;
   const hireds: IHired[] = [];
 
+  //Função para adicionar os contratados diretamente no array
   const addHired = (hired: IHired) => {
     let hiredFind = hireds.find((hire) => hire.id === hired.id);
     if (hiredFind) {
@@ -18,6 +26,7 @@ const extractHireds = (result: RowDataPacket[]) => {
   };
 
   rows.forEach((row) => {
+    //Objeto extraido da linha da consulta
     const hiredExtracted: IHired = {
       id: row.id,
       cpf: row.cpf,
@@ -26,13 +35,14 @@ const extractHireds = (result: RowDataPacket[]) => {
       knowledges: [row.knowledge_name],
       valid: row.valid,
       dateValidate: row.date_validate,
+      phone: row.phone,
     };
-    if (row.phone !== "") hiredExtracted.phone = row.phone;
     addHired(hiredExtracted);
   });
   return hireds;
 };
 
+//Função feita para criar um contratado no banco de dados
 export const create = async (hired: IHiredRegister, callback: Function) => {
   const queryString =
     "INSERT INTO hired (name, email, cpf, phone, valid) VALUES (?, ?, ?, ?, ?)";
@@ -45,29 +55,28 @@ export const create = async (hired: IHiredRegister, callback: Function) => {
         return;
       }
 
+      //ultimo id adicionado
       const insertId = (<OkPacket>result).insertId;
 
       const hiredAdded: IHiredRegistered = {
         ...hired,
-        id: insertId.toString()
+        id: insertId.toString(),
       };
 
+      //Função para fazer a ligação entre contratado e conhecimentos
       hired.knowledges.forEach((knowledge) => {
-        try {
-          knowledgeModel.findOne(knowledge, (err: Error, know: Knowledge) => {
-            if (know) {
-              hired_knowledgeModel.create(hiredAdded, know);
-            }
-          });
-        } catch (err) {
-          return;
-        }
+        knowledgeModel.findOne(knowledge, (err: Error, know: Knowledge) => {
+          if (know) {
+            hired_knowledgeModel.create(hiredAdded, know);
+          }
+        });
       });
       callback(null, hiredAdded);
     }
   );
 };
 
+//Função para procurar um contratado
 export const findOne = (hiredId: number, callback: Function) => {
   const queryString = `
       SELECT 
@@ -88,6 +97,7 @@ export const findOne = (hiredId: number, callback: Function) => {
   });
 };
 
+//Função para procurar um contratado pelo nome
 export const findByName = (hiredName: string, callback: Function) => {
   const queryString = `
         SELECT o.*, 
@@ -107,6 +117,7 @@ export const findByName = (hiredName: string, callback: Function) => {
   });
 };
 
+//Função para pegar todos os contratados validos ( que possuem ao menos 1 conhecimento cadastrado )
 export const findAll = (callback: Function) => {
   const queryString = `
         SELECT o.*, 
@@ -124,16 +135,14 @@ export const findAll = (callback: Function) => {
   });
 };
 
+
+//Função para atualizar um contratado
 export const update = async (hired: IHiredUpdate, callback: Function) => {
   const queryString =
     "UPDATE hired SET valid = ?, date_validate = ? WHERE id = ?";
   db.query(
     queryString,
-    [
-      hired.valid,
-      hired.dateValidate,
-      hired.id,
-    ],
+    [hired.valid, hired.dateValidate, hired.id],
     (err, result) => {
       if (err) {
         callback(err);
