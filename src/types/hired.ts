@@ -1,15 +1,20 @@
-export interface IHired extends BasicHired {
+export interface BasicHiredId {
   id: number;
 }
+
+export interface IHired extends BasicHired, BasicHiredId {}
+
 export interface BasicHired {
   name: string;
   email: string;
   cpf: string;
-  phone: string;
+  phone?: string;
   valid: boolean;
   dateValidate: number;
   knowledges: string[];
 }
+
+export type IHiredUpdate = Omit<IHired, "knowledges">;
 
 export interface Knowledge extends BasicKnowledge {
   id: number;

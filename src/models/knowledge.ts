@@ -24,11 +24,14 @@ export const findOne = (knowledgeName: string, callback: Function) => {
     }
 
     const row = (<RowDataPacket[]>result)[0];
-    const knowledge: Knowledge = {
-      id: row.id,
-      name: row.name,
-    };
-
-    callback(null, knowledge);
+    if (row) {
+      const knowledge: Knowledge = {
+        id: row.id,
+        name: row.name,
+      };
+      callback(null, knowledge);
+    } else {
+      callback(null);
+    }
   });
 };
