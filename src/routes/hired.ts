@@ -28,12 +28,12 @@ hiredRouter.get("/findByName", async (req: Request, res: Response) => {
 
 hiredRouter.post("/", async (req: Request, res: Response) => {
 
-  const { name, email, cpf, phone, knowledges } = req.body;
+  const { name, email, cpf, phone, knowledges, valid, dateValidate } = req.body;
 
   //criar validação aqui
 
   let hired: BasicHired = {
-    name, email, cpf, phone, knowledges
+    name, email, cpf, phone, knowledges, valid, dateValidate
   }
 
   hiredModel.create(hired, (err: Error, hiredCreated: IHired) => {

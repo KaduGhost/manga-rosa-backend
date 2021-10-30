@@ -67,6 +67,8 @@ export const findOne = (hiredId: number, callback: Function) => {
         name: row.name,
         phone: row.phone,
         knowledges: [row.knowledge_name],
+        valid: row.valid,
+        dateValidate: row.date_validate
       };
       addHired(order);
     });
@@ -108,6 +110,8 @@ export const findByName = (hiredName: string, callback: Function) => {
         name: row.name,
         phone: row.phone,
         knowledges: [row.knowledge_name],
+        valid: row.valid,
+        dateValidate: row.date_validate
       };
       addHired(order);
     });
@@ -147,6 +151,8 @@ export const findAll = (callback: Function) => {
         name: row.name,
         phone: row.phone,
         knowledges: [row.knowledge_name],
+        valid: row.valid,
+        dateValidate: row.date_validate
       };
       addHired(order);
     });
