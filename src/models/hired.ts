@@ -1,4 +1,4 @@
-import { BasicHired, IHired, IHiredUpdate, Knowledge } from "../types/hired";
+import { BasicHired, IHired, IHiredRegister, IHiredRegistered, IHiredUpdate, Knowledge } from "../types/hired";
 import { db } from "../../db";
 import { OkPacket, RowDataPacket } from "mysql2";
 import * as hired_knowledgeModel from "../models/hired_knowledge";
@@ -33,7 +33,7 @@ const extractHireds = (result: RowDataPacket[]) => {
   return hireds;
 };
 
-export const create = async (hired: BasicHired, callback: Function) => {
+export const create = async (hired: IHiredRegister, callback: Function) => {
   const queryString =
     "INSERT INTO hired (name, email, cpf, phone, valid) VALUES (?, ?, ?, ?, ?)";
   db.query(
@@ -47,9 +47,9 @@ export const create = async (hired: BasicHired, callback: Function) => {
 
       const insertId = (<OkPacket>result).insertId;
 
-      const hiredAdded: IHired = {
+      const hiredAdded: IHiredRegistered = {
         ...hired,
-        id: insertId,
+        id: insertId.toString()
       };
 
       hired.knowledges.forEach((knowledge) => {

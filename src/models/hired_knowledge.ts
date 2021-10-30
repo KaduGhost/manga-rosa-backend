@@ -1,8 +1,8 @@
-import { IHired, Knowledge } from "../types/hired";
+import { IHiredRegistered, Knowledge } from "../types/hired";
 import { db } from "../../db";
 
 export const create = (
-  hired: IHired,
+  hired: IHiredRegistered,
   knowledge: Knowledge
 ) => {
   const queryString =
