@@ -1,4 +1,4 @@
-# Manga Rosa Frontend
+# Manga Rosa Backend
 
 Um projeto de gerenciamento de contratados feito em NodeJs, utilizando a biblioteca express e banco de dados MySql.
 Projeto feito para alimentar o frontend `manga-rosa-frontend`. Você encontra está aplicação clicando [aqui](https://github.com/KaduGhost/manga-rosa-frontend).
