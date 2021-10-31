@@ -47,7 +47,7 @@ Este projeto possui 4 rota utilizaveis, veja a descrição delas abaixo.
 
 | Rota                             | Metódo | Descrição                                    |
 | -------------------------------- | ------- | -------------------------------------------- |
-| `/hired/`                        | `get`  | Está rota serve para buscar todos os contratados válidos |
+| `/hired/`                        | `get`  | Está rota serve para buscar todos os contratados |
 | `/hired/`                        | `post` | Está rota serve para cadastrar um novo contratado        |
 | `/hired/findByName/`             | `get`  | Está rota serve para buscar apenas um contratado pelo seu nome completo |
 | `/hired/`                        | `put`  | Está rota serve para editar o status de validação do contratado         |
