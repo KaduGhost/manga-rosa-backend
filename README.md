@@ -77,7 +77,7 @@ Objeto que deve ser enviado na rota `/hired/` utilizando o metódo `put`
 Parametro que deve ser enviado na rota `/hired/findByName` utilizando o metódo `get`
 
 ```sh
-/hired/findByName?name=nome completo do colaborador
+"/hired/findByName?name=nome completo do colaborador"
 ```
 
 Feito por Carlos Eduardo (KaduGhost)
