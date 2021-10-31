@@ -24,6 +24,18 @@ Utilize o seguinte comando para instalar as dependências desta aplicação:
 npm install
 ```
 
+Utilize as seguintes linhas sql para gerar os dados iniciais e tabelas da aplicação
+
+```sh
+CREATE TABLE IF NOT EXISTS hired (id bigint AUTO_INCREMENT PRIMARY KEY, name varchar(100) not null, email varchar(100) not null, cpf varchar(14) unique not null, phone varchar(11), date_validate bigint default 0, valid boolean);
+
+CREATE TABLE IF NOT EXISTS knowledges(id bigint AUTO_INCREMENT PRIMARY KEY, name varchar(30) not null);
+
+CREATE TABLE IF NOT EXISTS hired_knowledges(id_hired bigint not null, id_knowledges bigint not null, FOREIGN KEY (id_hired) REFERENCES hired(id), FOREIGN KEY (id_knowledges) REFERENCES knowledges(id));
+
+INSERT INTO knowledges (name) VALUES ("Git"), ("React"), ("PHP"), ("NodeJS"), ("DevOps"), ("Banco de Dados"), ("TypeScript")
+```
+
 Crie um arquivo .env com:
 
 ```sh
